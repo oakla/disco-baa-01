@@ -50,7 +50,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Set up environment variables:
+4. Install the package in development mode (recommended for development):
+```bash
+pip install -e .
+```
+
+5. Set up environment variables:
 ```bash
 cp .env.example .env
 # Edit .env with your configuration

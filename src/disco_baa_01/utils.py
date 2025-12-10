@@ -4,6 +4,7 @@ Utility functions for data science operations
 
 import pandas as pd
 import numpy as np
+import random
 from pathlib import Path
 from typing import Union
 
@@ -53,9 +54,10 @@ def describe_data(df: pd.DataFrame) -> dict:
 
 def set_random_seed(seed: int = 42) -> None:
     """
-    Set random seed for reproducibility.
+    Set random seed for reproducibility across multiple libraries.
     
     Args:
         seed: Random seed value
     """
+    random.seed(seed)
     np.random.seed(seed)
