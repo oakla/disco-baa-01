@@ -5,6 +5,7 @@ import warnings
 import numpy as np
 from scipy.optimize import curve_fit
 import argparse
+import sys
 
 # Suppress warnings
 warnings.filterwarnings('ignore')
@@ -352,11 +353,11 @@ if __name__ == "__main__":
         print("  1. Command-line argument: --excel-file <path>")
         print("  2. Environment variable: EXCEL_DATA_FILE")
         parser.print_help()
-        exit(1)
+        sys.exit(1)
     
     if not os.path.exists(large_excel_file):
         print(f"❌ Error: Excel file not found at: {large_excel_file}")
-        exit(1)
+        sys.exit(1)
     
     print(f"📂 Processing Excel file: {large_excel_file}")
     print(f"📄 Sheet name: {args.sheet_name}")
