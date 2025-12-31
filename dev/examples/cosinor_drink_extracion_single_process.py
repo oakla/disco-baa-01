@@ -4,6 +4,7 @@ import os
 import warnings
 import numpy as np
 from scipy.optimize import curve_fit
+import argparse
 
 # Suppress warnings
 warnings.filterwarnings('ignore')
@@ -327,20 +328,49 @@ def process_all_splitted_data(splitted_data_dir=SPLITTED_DATA_DIR, abnormal_temp
             process_single_sheep_drinking(file_path, sheep_id, abnormal_temp_thresh, temp_thresh, extract_min_max_temp)
 
 if __name__ == "__main__":
-    #  Assume your large Excel file is named 'rumen_temp_large.xlsx'. (假设你的大 Excel 文件名为 'rumen_temp_large.xlsx')
-    large_excel_file = "C:/Users/22828187/Desktop/Excel File BK/newest_data/AAA 2024 KELLERBERRIN CALIBRATED.xlsx"
-    sheet_name = 'CALIB'
-    abnormal_temp_thresh = 35
-    temp_thresh = -0.8
-    extract_min_max_temp = True
-
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description='Process sheep rumen temperature data with cosinor analysis and drinking detection.')
+    parser.add_argument('--excel-file', type=str, default=None,
+                        help='Path to the large Excel file containing sheep data')
+    parser.add_argument('--sheet-name', type=str, default='CALIB',
+                        help='Sheet name in the Excel file (default: CALIB)')
+    parser.add_argument('--abnormal-temp-thresh', type=float, default=35,
+                        help='Abnormal temperature threshold (default: 35)')
+    parser.add_argument('--temp-thresh', type=float, default=-0.8,
+                        help='Temperature change threshold for drinking detection (default: -0.8)')
+    parser.add_argument('--extract-min-max-temp', action='store_true', default=True,
+                        help='Extract min/max temperature values (default: True)')
+    
+    args = parser.parse_args()
+    
+    # Get Excel file path from command-line argument, environment variable, or raise an error
+    large_excel_file = args.excel_file or os.getenv('EXCEL_DATA_FILE')
+    
+    if not large_excel_file:
+        print("❌ Error: Excel file path not provided.")
+        print("Please provide the Excel file path via:")
+        print("  1. Command-line argument: --excel-file <path>")
+        print("  2. Environment variable: EXCEL_DATA_FILE")
+        parser.print_help()
+        exit(1)
+    
+    if not os.path.exists(large_excel_file):
+        print(f"❌ Error: Excel file not found at: {large_excel_file}")
+        exit(1)
+    
+    print(f"📂 Processing Excel file: {large_excel_file}")
+    print(f"📄 Sheet name: {args.sheet_name}")
+    print(f"🌡️  Abnormal temperature threshold: {args.abnormal_temp_thresh}")
+    print(f"📉 Temperature change threshold: {args.temp_thresh}")
+    print(f"📊 Extract min/max temperature: {args.extract_min_max_temp}")
+    
     # 1. Split data (拆分数据)
-    sheep_ids = split_data_by_sheep(large_excel_file, sheet_name)
+    sheep_ids = split_data_by_sheep(large_excel_file, args.sheet_name)
 
     if sheep_ids:
         print("\n--- Starting single-threaded processing of each sheep ---")
         # 2. Process split data in a single thread (单线程处理拆分后的数据)
-        process_all_splitted_data(SPLITTED_DATA_DIR, abnormal_temp_thresh, temp_thresh, extract_min_max_temp)
+        process_all_splitted_data(SPLITTED_DATA_DIR, args.abnormal_temp_thresh, args.temp_thresh, args.extract_min_max_temp)
         print("\n✅ Finished processing all sheep data.")
     else:
         print("⚠️ No sheep data found or splitting failed.")
