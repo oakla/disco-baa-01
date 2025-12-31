@@ -296,15 +296,15 @@ def split_data_by_sheep(input_excel_path, sheet_name='Sheet1'):
     """
     try:
         sheep_data_all = pd.read_excel(input_excel_path, sheet_name=sheet_name)
-        sheep_data_colums = [col for col in sheep_data_all.columns if 'DT' not in col and 'hour' not in col and 'date' not in col]
+        sheep_data_columns = [col for col in sheep_data_all.columns if 'DT' not in col and 'hour' not in col and 'date' not in col]
 
-        for sheep_id in sheep_data_colums:
+        for sheep_id in sheep_data_columns:
             sheep_df = sheep_data_all[['DT', sheep_id]].copy()
             output_csv_path = os.path.join(SPLITTED_DATA_DIR, f'{sheep_id}.csv')
             sheep_df.to_csv(output_csv_path, index=False)
             print(f"✅ Created splitted file for {sheep_id}: {output_csv_path}")
 
-        return sheep_data_colums
+        return sheep_data_columns
 
     except FileNotFoundError:
         print(f"⚠️ Error: Excel file not found at {input_excel_path}")
