@@ -338,8 +338,8 @@ if __name__ == "__main__":
                         help='Abnormal temperature threshold (default: 35)')
     parser.add_argument('--temp-thresh', type=float, default=-0.8,
                         help='Temperature change threshold for drinking detection (default: -0.8)')
-    parser.add_argument('--extract-min-max-temp', action='store_true', default=True,
-                        help='Extract min/max temperature values (default: True)')
+    parser.add_argument('--no-extract-min-max-temp', action='store_false', dest='extract_min_max_temp',
+                        help='Disable extraction of min/max temperature values (enabled by default)')
     
     args = parser.parse_args()
     
