@@ -1,7 +1,10 @@
-data/**
-artifacts/**
-dev/temp/**
+data/*
+artifacts/*
+dev/temp/*
 src/definitions.py
+data/01_raw/*
+!data/01_raw/
+!data/01_raw/README.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
